@@ -1,62 +1,100 @@
+const streams = [
+  {
+    channel: 'dis_1',
+    avatar: 'https://static-cdn.jtvnw.net/jtv_user_pictures/2e2e2e2e-profile_image-70x70.png',
+    title: 'DIS_1 24/7',
+    viewers: 1200
+  },
+  {
+    channel: 'big_cuzo',
+    avatar: 'https://static-cdn.jtvnw.net/jtv_user_pictures/3b3b3b3b-profile_image-70x70.png',
+    title: 'Big Cuzo',
+    viewers: 980
+  },
+  {
+    channel: 'widdz',
+    avatar: 'https://static-cdn.jtvnw.net/jtv_user_pictures/4c4c4c4c-profile_image-70x70.png',
+    title: 'Widdz',
+    viewers: 2100
+  },
+  {
+    channel: 'theburntpeanut_247',
+    avatar: 'https://static-cdn.jtvnw.net/jtv_user_pictures/5d5d5d5d-profile_image-70x70.png',
+    title: 'TheBurntPeanut 24/7',
+    viewers: 1500
+  },
+  {
+    channel: 'shrood',
+    avatar: 'https://static-cdn.jtvnw.net/jtv_user_pictures/6e6e6e6e-profile_image-70x70.png',
+    title: 'Shrood',
+    viewers: 1700
+  },
+  {
+    channel: 'blurbstv',
+    avatar: 'https://static-cdn.jtvnw.net/jtv_user_pictures/7f7f7f7f-profile_image-70x70.png',
+    title: 'BlurbsTV',
+    viewers: 800
+  },
+  {
+    channel: 'snacksypoo247',
+    avatar: 'https://static-cdn.jtvnw.net/jtv_user_pictures/8a8a8a8a-profile_image-70x70.png',
+    title: 'Snacksypoo 24/7',
+    viewers: 600
+  },
+  {
+    channel: 'toriasmr',
+    avatar: 'https://static-cdn.jtvnw.net/jtv_user_pictures/9b9b9b9b-profile_image-70x70.png',
+    title: 'ToriASMR',
+    viewers: 1100
+  },
+  {
+    channel: 'yugioh_official',
+    avatar: 'https://static-cdn.jtvnw.net/jtv_user_pictures/aaaaaaa-profile_image-70x70.png',
+    title: 'Yu-Gi-Oh! Official',
+    viewers: 900
+  },
+  {
+    channel: 'retrocrush_tv',
+    avatar: 'https://static-cdn.jtvnw.net/jtv_user_pictures/bbbbbbb-profile_image-70x70.png',
+    title: 'RetroCrush TV',
+    viewers: 700
+  },
+  {
+    channel: 'alf',
+    avatar: 'https://static-cdn.jtvnw.net/jtv_user_pictures/ccccccc-profile_image-70x70.png',
+    title: 'ALF',
+    viewers: 500
+  },
+  {
+    channel: 'lirik_247',
+    avatar: 'https://static-cdn.jtvnw.net/jtv_user_pictures/ddddddd-profile_image-70x70.png',
+    title: 'Lirik 24/7',
+    viewers: 1300
+  }
+];
+
 const streamsGrid = document.getElementById('streams-grid');
-const categoryBtns = document.querySelectorAll('.category-btn');
 
-// Популярные Twitch-каналы по категориям (можно обновить по желанию)
-const twitchStreams = {
-  cs2: [
-    { title: 's1mple', channel: 's1mple', viewers: null },
-    { title: 'Gaules', channel: 'gaules', viewers: null },
-    { title: 'ESL_CSGO', channel: 'esl_csgo', viewers: null },
-    { title: 'fl0m', channel: 'fl0m', viewers: null },
-    { title: 'Pimp', channel: 'pimp', viewers: null },
-  ],
-  rust: [
-    { title: 'hJune', channel: 'hjune', viewers: null },
-    { title: 'Blooprint', channel: 'blooprint', viewers: null },
-    { title: 'Frost', channel: 'frost', viewers: null },
-    { title: 'Welyn', channel: 'welyn', viewers: null },
-    { title: 'Stevie', channel: 'stevie', viewers: null },
-  ],
-  pubg: [
-    { title: 'chocoTaco', channel: 'chocotaco', viewers: null },
-    { title: 'halifax', channel: 'halifax', viewers: null },
-    { title: 'TGLTN', channel: 'tgltn', viewers: null },
-    { title: 'Ibiza', channel: 'ibiza', viewers: null },
-    { title: 'TheRealKraftyy', channel: 'therealkraftyy', viewers: null },
-  ],
-};
-
-function renderStreams(category) {
+function renderStreams() {
   streamsGrid.innerHTML = '';
-  twitchStreams[category].forEach(stream => {
+  streams.forEach(stream => {
     const tile = document.createElement('div');
     tile.className = 'stream-tile';
     tile.innerHTML = `
-      <div style="position:relative;width:100%;height:180px;background:#111;display:flex;align-items:center;justify-content:center;overflow:hidden;">
-        <iframe
-          src="https://player.twitch.tv/?channel=${stream.channel}&parent=${location.hostname}"
-          frameborder="0"
-          allowfullscreen="true"
-          scrolling="no"
-          height="180"
-          width="100%"
-          style="border:none;display:block;background:#111;"
-        ></iframe>
+      <div class="twitch-embed-container">
+        <iframe src="https://player.twitch.tv/?channel=${stream.channel}&parent=${location.hostname}&autoplay=true&muted=true&time=0s" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
       </div>
-      <div class="stream-title">${stream.title}</div>
-      <div class="stream-meta">Канал: <b>${stream.channel}</b></div>
+      <div class="stream-info">
+        <img class="stream-avatar" src="${stream.avatar}" alt="${stream.channel}">
+        <div class="stream-meta">
+          <div class="stream-title">${stream.title}</div>
+          <a class="stream-channel" href="https://www.twitch.tv/${stream.channel}" target="_blank">${stream.channel}</a>
+          <div class="stream-viewers">${stream.viewers} зрителей</div>
+        </div>
+      </div>
     `;
     streamsGrid.appendChild(tile);
   });
 }
 
-categoryBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelector('.category-btn.active').classList.remove('active');
-    btn.classList.add('active');
-    renderStreams(btn.dataset.category);
-  });
-});
-
-// По умолчанию показываем CS2
-renderStreams('cs2');
+renderStreams();
