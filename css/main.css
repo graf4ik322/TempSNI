@@ -7,80 +7,223 @@ body {
 }
 .header {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  padding: 2rem 1rem 1rem 1rem;
-  background: #0a0a0a;
+  justify-content: space-between;
+  padding: 1.2rem 2vw 1.2rem 2vw;
+  background: #111111;
+  border-bottom: 2px solid #FFD700;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.18);
 }
-.header h1 {
-  color: #FFD700;
-  font-size: 2.2rem;
-  margin: 0 0 1rem 0;
-  letter-spacing: 2px;
-}
-.categories {
+.logo-twitch {
   display: flex;
-  gap: 1rem;
-}
-.category-btn {
-  background: none;
-  border: 2px solid #FFD700;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 1.5rem;
+  font-weight: bold;
   color: #FFD700;
-  padding: 0.5rem 1.5rem;
-  border-radius: 999px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  letter-spacing: 1px;
 }
-.category-btn.active, .category-btn:hover {
-  background: #FFD700;
-  color: #0a0a0a;
+.nav-twitch {
+  font-size: 1.1rem;
+  color: #FFD700;
+  font-weight: 600;
+  letter-spacing: 1px;
 }
 .streams-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 2rem;
-  padding: 2rem 5vw;
-  max-width: 1400px;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 2.2rem;
+  padding: 2.5rem 5vw 2.5rem 5vw;
+  max-width: 1600px;
   margin: 0 auto;
 }
 .stream-tile {
-  background: #181818;
-  border-radius: 1rem;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.4);
+  background: linear-gradient(135deg, #181818 80%, #FFD70011 100%);
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 24px 0 rgba(0,0,0,0.25);
+  border: 2px solid #FFD70044;
   overflow: hidden;
-  border: 1.5px solid #FFD700;
   display: flex;
   flex-direction: column;
-  min-height: 320px;
-  transition: transform 0.15s;
+  transition: transform 0.18s, box-shadow 0.18s, border 0.18s;
+  position: relative;
 }
 .stream-tile:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 4px 32px rgba(255,215,0,0.12);
+  transform: translateY(-6px) scale(1.025);
+  box-shadow: 0 8px 36px 0 rgba(255,215,0,0.13), 0 2px 24px 0 rgba(0,0,0,0.25);
+  border: 2.5px solid #FFD700;
+}
+.twitch-embed-container {
+  aspect-ratio: 16/9;
+  width: 100%;
+  background: #000;
+  border-bottom: 1.5px solid #FFD70044;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.stream-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 1.2rem 0.7rem 1.2rem;
+}
+.stream-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid #FFD700;
+  background: #222;
+  object-fit: cover;
+}
+.stream-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
 }
 .stream-title {
   color: #FFD700;
   font-size: 1.1rem;
-  margin: 1rem 1rem 0.5rem 1rem;
-  font-weight: 600;
+  font-weight: 700;
+  margin-bottom: 0.1rem;
 }
-.stream-meta {
+.stream-channel {
   color: #f5f5f5;
-  font-size: 0.95rem;
-  margin: 0 1rem 1rem 1rem;
-  opacity: 0.8;
+  font-size: 1rem;
+  opacity: 0.85;
 }
-@media (max-width: 600px) {
+.stream-viewers {
+  color: #FFD700;
+  font-size: 0.98rem;
+  font-weight: 600;
+  margin-top: 0.2rem;
+}
+.footer {
+  background: #111111;
+  color: #FFD700;
+  text-align: center;
+  padding: 1.2rem 0 1.2rem 0;
+  font-size: 1.1rem;
+  border-top: 2px solid #FFD700;
+  margin-top: 2rem;
+}
+@media (max-width: 700px) {
   .streams-grid {
     padding: 1rem 2vw;
-    gap: 1rem;
+    gap: 1.1rem;
   }
-  .header h1 {
-    font-size: 1.3rem;
+  .header {
+    flex-direction: column;
+    gap: 0.7rem;
+    padding: 1rem 2vw 1rem 2vw;
   }
-  .category-btn {
-    font-size: 0.9rem;
-    padding: 0.4rem 1rem;
+  .logo-twitch {
+    font-size: 1.1rem;
+  }
+}
+.big-stream-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0; right: 0; bottom: 0;
+  width: 100vw; height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10,10,10,0.92);
+  transition: opacity 0.2s;
+}
+.big-stream-modal.show {
+  display: flex;
+  animation: fadeIn 0.2s;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.big-stream-backdrop {
+  position: absolute;
+  left: 0; top: 0; right: 0; bottom: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(10,10,10,0.85);
+  z-index: 1;
+}
+.big-stream-content {
+  position: relative;
+  z-index: 2;
+  background: #181818;
+  border-radius: 1.2rem;
+  border: 2.5px solid #FFD700;
+  box-shadow: 0 8px 48px 0 rgba(255,215,0,0.13), 0 2px 24px 0 rgba(0,0,0,0.25);
+  padding: 1.5rem 1.5rem 1.2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 340px;
+  max-width: 900px;
+  width: 90vw;
+}
+.big-stream-iframe-wrap {
+  width: 70vw;
+  max-width: 800px;
+  min-width: 320px;
+  aspect-ratio: 16/9;
+  background: #000;
+  border-radius: 0.7rem;
+  overflow: hidden;
+  margin-bottom: 1.2rem;
+  border: 1.5px solid #FFD70044;
+}
+.big-stream-meta {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  margin-top: 0.5rem;
+}
+.big-stream-meta .stream-avatar {
+  width: 56px;
+  height: 56px;
+  border-width: 2.5px;
+}
+.big-stream-meta .stream-title {
+  color: #FFD700;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+.big-stream-meta .stream-channel {
+  color: #FFD700;
+  font-size: 1.05rem;
+  text-decoration: underline;
+  margin-left: 0.5rem;
+}
+.big-stream-close {
+  position: absolute;
+  top: 0.7rem;
+  right: 1.1rem;
+  background: #FFD700;
+  color: #0a0a0a;
+  border: none;
+  border-radius: 50%;
+  width: 2.2rem;
+  height: 2.2rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.18);
+  transition: background 0.15s, color 0.15s;
+  z-index: 3;
+}
+.big-stream-close:hover {
+  background: #fffbe6;
+  color: #FFD700;
+}
+@media (max-width: 900px) {
+  .big-stream-iframe-wrap {
+    width: 95vw;
+    max-width: 98vw;
+  }
+  .big-stream-content {
+    width: 98vw;
+    min-width: 0;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
   }
 }

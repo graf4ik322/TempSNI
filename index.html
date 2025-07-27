@@ -3,23 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TopSteam — Лучшие стримы Twitch</title>
+  <title>TopSteam — Лучшие Twitch 24/7</title>
   <link rel="stylesheet" href="css/main.css">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 </head>
 <body>
   <header class="header">
-    <h1>TopSteam</h1>
-    <nav class="categories">
-      <button class="category-btn active" data-category="cs2">CS2</button>
-      <button class="category-btn" data-category="rust">Rust</button>
-      <button class="category-btn" data-category="pubg">PUBG</button>
+    <div class="logo-twitch">
+      <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="8" fill="#FFD700"/><text x="50%" y="60%" text-anchor="middle" fill="#0a0a0a" font-size="18" font-family="Arial Black,Arial,sans-serif" font-weight="bold">TS</text></svg>
+      <span>TopSteam</span>
+    </div>
+    <nav class="nav-twitch">
+      <span>24/7 Streams</span>
     </nav>
   </header>
   <main>
     <section id="streams-grid" class="streams-grid">
-      <!-- Здесь будут плитки стримов -->
+      <!-- Стримы будут вставлены через JS -->
     </section>
   </main>
+  <footer class="footer">
+    <span>Powered by TopSteam &copy; 2024</span>
+  </footer>
   <script type="module" src="js/main.js"></script>
 </body>
 </html>
