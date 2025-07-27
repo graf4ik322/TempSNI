@@ -9,17 +9,17 @@ graph TB
     B --> C[Local Storage]
     B --> D[Session Storage]
     B --> E[File API]
-    B --> F[External APIs]
+    B --> F[iframe]
     
     subgraph "Vanilla Frontend"
         B --> G[DOM Modules]
         B --> H[State Management]
-        B --> I[Service Layer]
-        B --> J[Utils Layer]
+        B --> I[Utils Layer]
+        B --> J[iframe Manager]
     end
     
-    F --> K[Public APIs with CORS]
-    F --> L[Fetch API]
+    F --> K[External Websites]
+    F --> L[Third-party Content]
     
     style A fill:#e1f5fe
     style B fill:#fff3e0
@@ -43,11 +43,11 @@ graph TD
     
     H --> K[textPlaceholder.js]
     H --> L[imagePlaceholder.js]
-    H --> M[videoPlaceholder.js]
+    H --> M[iframePlaceholder.js]
     
     I --> N[themeSelector.js]
     I --> O[contentEditor.js]
-    I --> P[apiIntegration.js]
+    I --> P[iframeManager.js]
     
     J --> Q[exportConfig.js]
     J --> R[importConfig.js]
@@ -73,11 +73,10 @@ sequenceDiagram
     C->>S: Обновляет state
     S->>LS: Сохраняет в localStorage
     
-    U->>C: Запрашивает внешние данные
-    C->>API: HTTP запрос
-    API-->>C: Данные или ошибка
+    U->>C: Добавляет iframe URL
     C->>S: Обновляет state
-    S->>LS: Кэширует данные
+    S->>LS: Сохраняет URL
+    C->>iframe: Загружает контент
 ```
 
 ### 4. СТРУКТУРА ДАННЫХ В LOCALSTORAGE
@@ -109,14 +108,11 @@ const AppConfig = {
 const PlaceholderConfig = {
   id: "unique-id",
   name: "My Placeholder",
-  type: "text", // "text" | "image" | "video" | "api"
+  type: "text", // "text" | "image" | "iframe"
   content: {
     text: "Sample text",
     imageUrl: "data:image/...", // или blob URL
-    videoUrl: "blob:...",
-    apiConfig: {
-      // APIConfig объект
-    }
+    iframeUrl: "https://example.com"
   },
   styling: {
     backgroundColor: "#ffffff",
@@ -128,17 +124,13 @@ const PlaceholderConfig = {
   modified: "2025-01-01T00:00:00.000Z"
 };
 
-const APIConfig = {
-  url: "https://api.example.com/data",
-  method: "GET", // "GET" | "POST"
-  headers: {
-    "Content-Type": "application/json"
-  },
-  params: {
-    key: "value"
-  },
-  dataPath: "data.items", // путь к данным в JSON ответе
-  refreshInterval: 3600 // в секундах
+const IframeConfig = {
+  url: "https://example.com",
+  title: "External Content",
+  allowFullscreen: true,
+  sandbox: "allow-scripts allow-same-origin", // sandbox настройки
+  width: "100%",
+  height: "400px"
 };
 ```
 
@@ -189,24 +181,23 @@ stateDiagram-v2
 
 ```mermaid
 graph LR
-    A[User Input] --> B[URL Validation]
-    B --> C{CORS Support?}
+    A[User Input URL] --> B[URL Validation]
+    B --> C{Valid URL?}
     
-    C -->|Yes| D[Direct API Call]
-    C -->|No| E[JSONP Check]
+    C -->|Yes| D[Create iframe]
+    C -->|No| E[Show Error]
     
-    E -->|Supported| F[JSONP Request]
-    E -->|Not Supported| G[Show CORS Warning]
+    D --> F{iframe Load Success?}
     
-    D --> H[Process Response]
-    F --> H
-    G --> I[Suggest Alternatives]
+    F -->|Yes| G[Display Content]
+    F -->|No| H[Show X-Frame-Options Error]
     
-    H --> J[Cache Data]
-    J --> K[Update UI]
+    G --> I[Save to localStorage]
+    H --> J[Suggest Direct Link]
     
-    style G fill:#ffcdd2
-    style I fill:#ffcdd2
+    style E fill:#ffcdd2
+    style H fill:#ffcdd2
+    style J fill:#fff3e0
 ```
 
 ### 8. СХЕМА ЭКСПОРТА/ИМПОРТА КОНФИГУРАЦИИ
