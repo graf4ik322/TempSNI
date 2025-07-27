@@ -5,21 +5,21 @@
 
 ```mermaid
 graph TB
-    A[Browser] --> B[React SPA]
+    A[Browser] --> B[Vanilla JS App]
     B --> C[Local Storage]
     B --> D[Session Storage]
-    B --> E[File System API]
+    B --> E[File API]
     B --> F[External APIs]
     
-    subgraph "Frontend Only"
-        B --> G[Component Layer]
+    subgraph "Vanilla Frontend"
+        B --> G[DOM Modules]
         B --> H[State Management]
         B --> I[Service Layer]
         B --> J[Utils Layer]
     end
     
     F --> K[Public APIs with CORS]
-    F --> L[JSON-P APIs]
+    F --> L[Fetch API]
     
     style A fill:#e1f5fe
     style B fill:#fff3e0
@@ -30,28 +30,28 @@ graph TB
 
 ```mermaid
 graph TD
-    A[App.tsx] --> B[Router]
-    B --> C[MainLayout]
-    C --> D[Header]
-    C --> E[Navigation]
-    C --> F[Content]
-    C --> G[Footer]
+    A[index.html] --> B[main.js]
+    B --> C[app.js]
+    C --> D[header.js]
+    C --> E[navigation.js]
+    C --> F[content.js]
+    C --> G[footer.js]
     
-    F --> H[PlaceholderView]
-    F --> I[SettingsPanel]
-    F --> J[ConfigurationManager]
+    F --> H[placeholderView.js]
+    F --> I[settingsPanel.js]
+    F --> J[configManager.js]
     
-    H --> K[TextPlaceholder]
-    H --> L[ImagePlaceholder]
-    H --> M[VideoPlaceholder]
+    H --> K[textPlaceholder.js]
+    H --> L[imagePlaceholder.js]
+    H --> M[videoPlaceholder.js]
     
-    I --> N[ThemeSelector]
-    I --> O[ContentEditor]
-    I --> P[APIIntegration]
+    I --> N[themeSelector.js]
+    I --> O[contentEditor.js]
+    I --> P[apiIntegration.js]
     
-    J --> Q[ExportConfig]
-    J --> R[ImportConfig]
-    J --> S[ShareConfig]
+    J --> Q[exportConfig.js]
+    J --> R[importConfig.js]
+    J --> S[shareConfig.js]
 ```
 
 ### 3. СХЕМА ПОТОКОВ ДАННЫХ
@@ -82,53 +82,64 @@ sequenceDiagram
 
 ### 4. СТРУКТУРА ДАННЫХ В LOCALSTORAGE
 
-```typescript
-interface AppConfig {
-  version: string;
+```javascript
+// Структура данных в localStorage (JSON)
+const AppConfig = {
+  version: "1.0.0",
   settings: {
-    theme: 'light' | 'dark';
-    language: string;
-    autoSave: boolean;
-  };
-  placeholders: PlaceholderConfig[];
+    theme: "light", // "light" | "dark"
+    language: "ru",
+    autoSave: true
+  },
+  placeholders: [
+    // PlaceholderConfig объекты
+  ],
   cache: {
-    [apiUrl: string]: {
-      data: any;
-      timestamp: number;
-      ttl: number;
-    };
-  };
-  history: ActionHistory[];
-}
+    // "apiUrl": {
+    //   data: any,
+    //   timestamp: number,
+    //   ttl: number
+    // }
+  },
+  history: [
+    // ActionHistory объекты
+  ]
+};
 
-interface PlaceholderConfig {
-  id: string;
-  name: string;
-  type: 'text' | 'image' | 'video' | 'api';
+const PlaceholderConfig = {
+  id: "unique-id",
+  name: "My Placeholder",
+  type: "text", // "text" | "image" | "video" | "api"
   content: {
-    text?: string;
-    imageUrl?: string;
-    videoUrl?: string;
-    apiConfig?: APIConfig;
-  };
+    text: "Sample text",
+    imageUrl: "data:image/...", // или blob URL
+    videoUrl: "blob:...",
+    apiConfig: {
+      // APIConfig объект
+    }
+  },
   styling: {
-    backgroundColor: string;
-    textColor: string;
-    fontSize: string;
-    fontFamily: string;
-  };
-  created: string;
-  modified: string;
-}
+    backgroundColor: "#ffffff",
+    textColor: "#000000",
+    fontSize: "16px",
+    fontFamily: "Arial, sans-serif"
+  },
+  created: "2025-01-01T00:00:00.000Z",
+  modified: "2025-01-01T00:00:00.000Z"
+};
 
-interface APIConfig {
-  url: string;
-  method: 'GET' | 'POST';
-  headers?: Record<string, string>;
-  params?: Record<string, any>;
-  dataPath?: string; // JSONPath для извлечения данных
-  refreshInterval?: number; // в секундах
-}
+const APIConfig = {
+  url: "https://api.example.com/data",
+  method: "GET", // "GET" | "POST"
+  headers: {
+    "Content-Type": "application/json"
+  },
+  params: {
+    key: "value"
+  },
+  dataPath: "data.items", // путь к данным в JSON ответе
+  refreshInterval: 3600 // в секундах
+};
 ```
 
 ### 5. СХЕМА ОБРАБОТКИ ОШИБОК

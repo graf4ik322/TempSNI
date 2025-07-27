@@ -51,32 +51,32 @@
 
 ### ЭТАП 1: Инициализация
 ```
-Создай новый Vite + React + TypeScript проект с названием "twch-placeholder". Настрой:
-1. ESLint и Prettier
+Создай базовую структуру проекта "twch-placeholder" на чистых технологиях:
+1. index.html с семантической HTML5 разметкой
 2. Структуру папок согласно TECHNICAL_SPECIFICATION.md секция 2.2
-3. Базовый роутинг с react-router-dom
-4. Основные layout компоненты (Header, Navigation, Footer)
-5. Систему тем (светлая/темная)
+3. CSS файлы (main.css, components.css, themes.css, responsive.css)
+4. JavaScript модули (main.js, app.js, компоненты)
+5. Роутинг через History API
 ```
 
 ### ЭТАП 2: Основной функционал
 ```
-Реализуй базовые placeholder компоненты:
-1. TextPlaceholder - для отображения текста с настройками
-2. ImagePlaceholder - для отображения изображений с drag&drop
-3. VideoPlaceholder - для отображения видео
-4. SettingsPanel - для конфигурации placeholder
-5. ThemeSelector - переключатель тем
+Реализуй базовые модули placeholder на vanilla JS:
+1. textPlaceholder.js - для отображения текста с настройками
+2. imagePlaceholder.js - для изображений с Drag&Drop API
+3. videoPlaceholder.js - для отображения видео
+4. settingsPanel.js - для конфигурации через DOM
+5. themeSelector.js - переключатель тем через CSS переменные
 Все настройки сохраняй в localStorage.
 ```
 
 ### ЭТАП 3: Интеграции
 ```
-Добавь продвинутые функции:
-1. APIIntegration - работа с внешними API (только с CORS поддержкой)
-2. ConfigExport - экспорт настроек в JSON
-3. ConfigImport - импорт настроек из JSON
-4. ShareConfig - генерация URL для шаринга
+Добавь продвинутые функции на vanilla JS:
+1. apiIntegration.js - работа с Fetch API (только CORS API)
+2. exportConfig.js - экспорт настроек через Blob API
+3. importConfig.js - импорт настроек через FileReader API
+4. shareConfig.js - генерация URL через URL parameters
 5. Кэширование API запросов с TTL в localStorage
 ```
 
@@ -177,23 +177,23 @@
 5. Протестируй работу с большими объемами данных в localStorage
 ```
 
-### Проверка TypeScript
+### Проверка JavaScript
 ```
-Проверь качество TypeScript кода:
-1. Все ли компоненты строго типизированы?
-2. Реализованы ли интерфейсы из ARCHITECTURE_DIAGRAMS.md секция 4?
-3. Нет ли использования 'any' типов?
-4. Покрыты ли типами все API интеграции?
-5. Соответствуют ли типы реальной структуре данных?
+Проверь качество JavaScript кода:
+1. Все ли модули используют ES6+ синтаксис?
+2. Реализованы ли структуры данных из ARCHITECTURE_DIAGRAMS.md секция 4?
+3. Есть ли proper error handling с try/catch?
+4. Покрыты ли валидацией все пользовательские вводы?
+5. Соответствуют ли данные структуре в localStorage?
 ```
 
 ### Подготовка к деплою
 ```
 Подготовь проект к production деплою:
-1. Настрой правильный build процесс для SPA
-2. Добавь необходимые meta теги и favicon
-3. Настрой правильные redirects для client-side routing
-4. Проверь что все env переменные правильно настроены
+1. Минифицируй CSS и JavaScript файлы
+2. Добавь необходимые meta теги, favicon и манифест
+3. Настрой правильную структуру для статического хостинга
+4. Проверь что все пути к файлам относительные
 5. Создай production-ready README с инструкциями
 ```
 
