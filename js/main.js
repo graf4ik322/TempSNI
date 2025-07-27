@@ -34,7 +34,7 @@ function renderStreams() {
     const avatarHTML = `<span class="stream-avatar stream-avatar-svg">${universalAvatarSVG}</span>`;
     tile.innerHTML = `
       <div class="twitch-embed-container">
-        <iframe src="https://player.twitch.tv/?channel=${stream.channel}&parent=${location.hostname}" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+        <iframe src="https://player.twitch.tv/?channel=${stream.channel}&parent=graf4ik322.github.io" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
       </div>
       <div class="stream-info">
         ${avatarHTML}
@@ -45,7 +45,7 @@ function renderStreams() {
         </div>
       </div>
     `;
-    tile.addEventListener('click', () => openBigStream(stream, avatarHTML, viewers));
+    tile.addEventListener('click', () => openBigStream(stream, viewers));
     streamsGrid.appendChild(tile);
     const iframe = tile.querySelector('iframe');
     miniIframes.push(iframe);
@@ -53,7 +53,7 @@ function renderStreams() {
   });
 }
 
-function openBigStream(stream, avatarHTML, viewers) {
+function openBigStream(stream, viewers) {
   miniIframes.forEach(iframe => { iframe.src = 'about:blank'; });
   let modal = document.getElementById('big-stream-modal');
   if (!modal) {
@@ -65,7 +65,7 @@ function openBigStream(stream, avatarHTML, viewers) {
         <button class="big-stream-close" title="Закрыть">×</button>
         <div class="big-stream-iframe-wrap"></div>
         <div class="big-stream-meta">
-          <span class="stream-avatar stream-avatar-svg"></span>
+          <span class="stream-avatar stream-avatar-svg">${universalAvatarSVG}</span>
           <div class="stream-title"></div>
           <a class="stream-channel" href="#" target="_blank"></a>
           <div class="stream-viewers"></div>
@@ -79,19 +79,20 @@ function openBigStream(stream, avatarHTML, viewers) {
       if (e.key === 'Escape') closeBigStream();
     });
   }
-  // Очищаем и вставляем iframe заново (гарантированно)
+  // Очищаем и вставляем iframe заново
   const iframeWrap = modal.querySelector('.big-stream-iframe-wrap');
   iframeWrap.innerHTML = '';
   const bigIframe = document.createElement('iframe');
-  bigIframe.src = `https://player.twitch.tv/?channel=${stream.channel}&parent=${location.hostname}&autoplay=true`;
-  bigIframe.width = '100%';
-  bigIframe.height = '100%';
+  bigIframe.src = `https://player.twitch.tv/?channel=${stream.channel}&parent=graf4ik322.github.io&autoplay=true`;
+  bigIframe.width = '800';
+  bigIframe.height = '450';
+  bigIframe.style.maxWidth = '90vw';
+  bigIframe.style.maxHeight = '60vh';
+  bigIframe.style.aspectRatio = '16/9';
   bigIframe.frameBorder = '0';
   bigIframe.allowFullscreen = true;
   iframeWrap.appendChild(bigIframe);
-  // Вставляем аватар
-  const avatarContainer = modal.querySelector('.big-stream-meta .stream-avatar');
-  avatarContainer.innerHTML = universalAvatarSVG;
+  // Заполняем мета
   modal.querySelector('.big-stream-meta .stream-title').textContent = stream.title;
   modal.querySelector('.big-stream-meta .stream-channel').href = `https://www.twitch.tv/${stream.channel}`;
   modal.querySelector('.big-stream-meta .stream-channel').textContent = stream.channel;
