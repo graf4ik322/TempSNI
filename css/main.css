@@ -14,11 +14,17 @@
   --ease: cubic-bezier(0.77, 0, 0.175, 1);
 }
 body.theme-light {
-  --primary: #fffbe6;
-  --text-primary: #181818;
-  --text-secondary: #444;
-  --glass: rgba(0,0,0,0.04);
-  --glass-border: rgba(0,0,0,0.08);
+  --primary: #f7f7f9;
+  --accent: #e6c200;
+  --glow: rgba(230, 194, 0, 0.13);
+  --soft-glow: rgba(230, 194, 0, 0.07);
+  --glass: rgba(255,255,255,0.85);
+  --glass-border: rgba(0,0,0,0.07);
+  --text-primary: #232323;
+  --text-secondary: #5a5a5a;
+  --text-muted: #b0b0b0;
+  --live: #e74c3c;
+  --live-glow: rgba(231,76,60,0.13);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
