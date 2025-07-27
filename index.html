@@ -8,6 +8,7 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 </head>
 <body>
+  <button class="theme-toggle" id="theme-toggle" title="Переключить тему">🌙</button>
   <header class="header">
     <div class="logo-twitch">
       <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="8" fill="#FFD700"/><text x="50%" y="60%" text-anchor="middle" fill="#0a0a0a" font-size="18" font-family="Arial Black,Arial,sans-serif" font-weight="bold">TS</text></svg>
@@ -17,11 +18,21 @@
       <span>24/7 Streams</span>
     </nav>
   </header>
+  <div class="stats-bar" id="stats-bar">
+    <span class="stat"><span class="icon">👥</span> <span id="stat-viewers">0</span> зрителей</span>
+    <span class="stat"><span class="icon">📺</span> <span id="stat-streams">0</span> стримов</span>
+    <span class="stat"><span class="icon">⏱️</span> <span id="stat-updated">0</span> сек. назад</span>
+  </div>
+  <button class="random-btn" id="random-btn">Случайный стрим</button>
   <main>
     <section id="streams-grid" class="streams-grid">
       <!-- Стримы будут вставлены через JS -->
     </section>
   </main>
+  <div class="fake-chat" id="fake-chat">
+    <div class="fake-chat-header">Twitch Chat</div>
+    <div class="fake-chat-messages" id="fake-chat-messages"></div>
+  </div>
   <footer class="footer">
     <span>Powered by TopSteam &copy; 2024</span>
   </footer>
