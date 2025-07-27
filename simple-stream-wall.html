@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stream Wall</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #18181b;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      text-align: center;
+      margin: 1.5rem 0 0.5rem 0;
+    }
+    #input-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    #stream-urls {
+      width: 90vw;
+      max-width: 600px;
+      min-height: 60px;
+      padding: 0.5rem;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+      resize: vertical;
+    }
+    #add-btn {
+      padding: 0.5rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      background: #007AFF;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-bottom: 1rem;
+    }
+    #wall {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1rem;
+      padding: 1rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .stream-tile {
+      background: #23232b;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px #0006;
+      position: relative;
+      transition: box-shadow 0.2s;
+      cursor: pointer;
+      aspect-ratio: 16/9;
+      display: flex;
+      align-items: stretch;
+      justify-content: stretch;
+    }
+    .stream-tile:hover {
+      box-shadow: 0 4px 16px #000a;
+    }
+    .stream-tile iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      pointer-events: none;
+      background: #000;
+    }
+    .fullscreen {
+      position: fixed !important;
+      top: 0; left: 0; right: 0; bottom: 0;
+      width: 100vw !important;
+      height: 100vh !important;
+      z-index: 9999;
+      background: #000;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      margin: 0 !important;
+      display: flex !important;
+      align-items: stretch;
+      justify-content: stretch;
+      cursor: zoom-out;
+    }
+    .fullscreen iframe {
+      pointer-events: auto;
+    }
+    @media (max-width: 600px) {
+      #wall {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Stream Wall</h1>
+  <div id="input-area">
+    <textarea id="stream-urls" placeholder="Вставьте ссылки на стримы, по одной в строке..."></textarea>
+    <button id="add-btn">Показать плитку</button>
+  </div>
+  <div id="wall"></div>
+  <script>
+    // Преобразует ссылку в iframe (YouTube, Twitch, Kick, Trovo, прямой iframe)
+    function getIframeHTML(url) {
+      url = url.trim();
+      if (!url) return '';
+      // YouTube
+      let yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/);
+      if (yt) {
+        return `<iframe src='https://www.youtube.com/embed/${yt[1]}' allowfullscreen></iframe>`;
+      }
+      // Twitch
+      let tw = url.match(/twitch\.tv\/([\w-]+)/);
+      if (tw) {
+        return `<iframe src='https://player.twitch.tv/?channel=${tw[1]}&parent='+location.hostname+'' allowfullscreen></iframe>`;
+      }
+      // Kick
+      let kick = url.match(/kick\.com\/([\w-]+)/);
+      if (kick) {
+        return `<iframe src='https://player.kick.com/${kick[1]}' allowfullscreen></iframe>`;
+      }
+      // Trovo
+      let trovo = url.match(/trovo\.live\/([\w-]+)/);
+      if (trovo) {
+        return `<iframe src='https://trovo.live/embed/player?streamer=${trovo[1]}' allowfullscreen></iframe>`;
+      }
+      // Прямой iframe
+      if (url.startsWith('http')) {
+        return `<iframe src='${url}' allowfullscreen></iframe>`;
+      }
+      return '';
+    }
+
+    function renderWall(urls) {
+      const wall = document.getElementById('wall');
+      wall.innerHTML = '';
+      urls.forEach((url, idx) => {
+        const tile = document.createElement('div');
+        tile.className = 'stream-tile';
+        tile.innerHTML = getIframeHTML(url);
+        tile.title = url;
+        tile.onclick = function(e) {
+          if (!tile.classList.contains('fullscreen')) {
+            // Развернуть
+            document.querySelectorAll('.fullscreen').forEach(el => el.classList.remove('fullscreen'));
+            tile.classList.add('fullscreen');
+            // Включить pointer-events для iframe
+            tile.querySelector('iframe').style.pointerEvents = 'auto';
+          } else {
+            // Свернуть
+            tile.classList.remove('fullscreen');
+            tile.querySelector('iframe').style.pointerEvents = 'none';
+          }
+        };
+        wall.appendChild(tile);
+      });
+    }
+
+    document.getElementById('add-btn').onclick = function() {
+      const raw = document.getElementById('stream-urls').value;
+      const urls = raw.split('\n').map(s => s.trim()).filter(Boolean);
+      renderWall(urls);
+    };
+  </script>
+</body>
+</html>
