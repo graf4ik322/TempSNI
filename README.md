@@ -7,8 +7,10 @@
 ### 📁 Структура документации
 
 - **[TECHNICAL_SPECIFICATION.md](./TECHNICAL_SPECIFICATION.md)** - Основное техническое задание
-- **[ARCHITECTURE_DIAGRAMS.md](./ARCHITECTURE_DIAGRAMS.md)** - Архитектурные диаграммы и схемы
+- **[ARCHITECTURE_DIAGRAMS.md](./ARCHITECTURE_DIAGRAMS.md)** - Архитектурные диаграммы и схемы  
 - **[QA_CHECKLIST.md](./QA_CHECKLIST.md)** - Чек-лист для контроля качества и приемки
+- **[DEVELOPMENT_AGENT_SETUP.md](./DEVELOPMENT_AGENT_SETUP.md)** - Инструкции для запуска AI agent
+- **[AGENT_COMMANDS_CHEATSHEET.md](./AGENT_COMMANDS_CHEATSHEET.md)** - Шпаргалка команд для agent
 
 ### 🎯 Ключевые требования
 
