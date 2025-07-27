@@ -1,24 +1,92 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-:root {
-  --primary: #0a0a0a;
-  --accent: hsl(46, 100%, 61%);
-  --glow: rgba(212, 175, 55, 0.15);
-  --soft-glow: rgba(212, 175, 55, 0.08);
-  --glass: rgba(255, 255, 255, 0.08);
-  --glass-border: rgba(255, 255, 255, 0.12);
-  --text-primary: #fff;
-  --text-secondary: rgba(255,255,255,0.7);
-  --text-muted: rgba(255,255,255,0.4);
-  --live: #ff3b3b;
-  --live-glow: rgba(255,59,59,0.18);
-  --ease: cubic-bezier(0.77, 0, 0.175, 1);
+/* Минималистичная палитра для тем */
+[data-theme="minimal-light"] {
+    --color-primary: #000000;
+    --color-on-primary: #FFFFFF;
+    --color-primary-container: #E0E0E0;
+    --color-on-primary-container: #000000;
+    --color-secondary: #424242;
+    --color-on-secondary: #FFFFFF;
+    --color-secondary-container: #EEEEEE;
+    --color-on-secondary-container: #212121;
+    --color-tertiary: #757575;
+    --color-on-tertiary: #FFFFFF;
+    --color-tertiary-container: #F5F5F5;
+    --color-on-tertiary-container: #333333;
+    --color-error: #B00020;
+    --color-on-error: #FFFFFF;
+    --color-error-container: #FDE7E9;
+    --color-on-error-container: #42000A;
+    --color-background: #FFFFFF;
+    --color-on-background: #000000;
+    --color-surface: #FFFFFF;
+    --color-on-surface: #000000;
+    --color-surface-variant: #F5F5F5;
+    --color-on-surface-variant: #3C3C3C;
+    --color-outline: #BDBDBD;
+    --color-inverse-on-surface: #FFFFFF;
+    --color-inverse-surface: #000000;
+    --color-inverse-primary: #FFFFFF;
+    --color-shadow: #000000;
+    --color-surface-tint: #000000;
+    --color-outline-variant: #E0E0E0;
+    --color-scrim: #000000;
+    /* Маппинг на старые переменные */
+    --primary: var(--color-background);
+    --accent: var(--color-primary);
+    --glow: rgba(0,0,0,0.10);
+    --soft-glow: rgba(0,0,0,0.05);
+    --glass: var(--color-surface-variant);
+    --glass-border: var(--color-outline);
+    --text-primary: var(--color-on-background);
+    --text-secondary: var(--color-on-surface-variant);
+    --text-muted: #b0b0b0;
+    --live: #B00020;
+    --live-glow: rgba(176,0,32,0.13);
 }
-body.theme-light {
-  --primary: #fffbe6;
-  --text-primary: #181818;
-  --text-secondary: #444;
-  --glass: rgba(0,0,0,0.04);
-  --glass-border: rgba(0,0,0,0.08);
+[data-theme="minimal-dark"] {
+    --color-primary: #FFFFFF;
+    --color-on-primary: #000000;
+    --color-primary-container: #424242;
+    --color-on-primary-container: #FFFFFF;
+    --color-secondary: #CCCCCC;
+    --color-on-secondary: #000000;
+    --color-secondary-container: #4A4A4A;
+    --color-on-secondary-container: #FFFFFF;
+    --color-tertiary: #999999;
+    --color-on-tertiary: #000000;
+    --color-tertiary-container: #5C5C5C;
+    --color-on-tertiary-container: #FFFFFF;
+    --color-error: #CF6679;
+    --color-on-error: #000000;
+    --color-error-container: #8E0038;
+    --color-on-error-container: #FFD8E4;
+    --color-background: #121212;
+    --color-on-background: #E0E0E0;
+    --color-surface: #121212;
+    --color-on-surface: #E0E0E0;
+    --color-surface-variant: #1E1E1E;
+    --color-on-surface-variant: #C6C6C6;
+    --color-outline: #3C3C3C;
+    --color-inverse-on-surface: #121212;
+    --color-inverse-surface: #E0E0E0;
+    --color-inverse-primary: #000000;
+    --color-shadow: #000000;
+    --color-surface-tint: #FFFFFF;
+    --color-outline-variant: #2C2C2C;
+    --color-scrim: #000000;
+    /* Маппинг на старые переменные */
+    --primary: var(--color-background);
+    --accent: var(--color-primary);
+    --glow: rgba(255,255,255,0.10);
+    --soft-glow: rgba(255,255,255,0.05);
+    --glass: var(--color-surface-variant);
+    --glass-border: var(--color-outline);
+    --text-primary: var(--color-on-background);
+    --text-secondary: var(--color-on-surface-variant);
+    --text-muted: #888;
+    --live: #CF6679;
+    --live-glow: rgba(207,102,121,0.13);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
