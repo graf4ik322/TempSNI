@@ -1,0 +1,13 @@
+{
+  "name": "TopSteam",
+  "short_name": "TopSteam",
+  "description": "Лучшие Twitch 24/7 стримы в премиальном интерфейсе EDEN CORE.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#FFD700",
+  "icons": [
+    { "src": "/favicon-192x192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/favicon-512x512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
