@@ -34,7 +34,7 @@ function renderStreams() {
     const avatarHTML = `<span class="stream-avatar stream-avatar-svg">${universalAvatarSVG}</span>`;
     tile.innerHTML = `
       <div class="twitch-embed-container">
-        <iframe src="https://player.twitch.tv/?channel=${stream.channel}&parent=${location.hostname}&autoplay=true&muted=true&time=0s" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+        <iframe src="https://player.twitch.tv/?channel=${stream.channel}&parent=${location.hostname}" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
       </div>
       <div class="stream-info">
         ${avatarHTML}
@@ -79,8 +79,17 @@ function openBigStream(stream, avatarHTML, viewers) {
       if (e.key === 'Escape') closeBigStream();
     });
   }
-  modal.querySelector('.big-stream-iframe-wrap').innerHTML =
-    `<iframe src="https://player.twitch.tv/?channel=${stream.channel}&parent=${location.hostname}&autoplay=true&time=0s" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>`;
+  // Очищаем и вставляем iframe заново (гарантированно)
+  const iframeWrap = modal.querySelector('.big-stream-iframe-wrap');
+  iframeWrap.innerHTML = '';
+  const bigIframe = document.createElement('iframe');
+  bigIframe.src = `https://player.twitch.tv/?channel=${stream.channel}&parent=${location.hostname}&autoplay=true`;
+  bigIframe.width = '100%';
+  bigIframe.height = '100%';
+  bigIframe.frameBorder = '0';
+  bigIframe.allowFullscreen = true;
+  iframeWrap.appendChild(bigIframe);
+  // Вставляем аватар
   const avatarContainer = modal.querySelector('.big-stream-meta .stream-avatar');
   avatarContainer.innerHTML = universalAvatarSVG;
   modal.querySelector('.big-stream-meta .stream-title').textContent = stream.title;
