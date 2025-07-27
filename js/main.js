@@ -74,9 +74,13 @@ const streams = [
 ];
 
 const streamsGrid = document.getElementById('streams-grid');
+let miniIframes = [];
+let miniSrcs = [];
 
 function renderStreams() {
   streamsGrid.innerHTML = '';
+  miniIframes = [];
+  miniSrcs = [];
   streams.forEach((stream, idx) => {
     const tile = document.createElement('div');
     tile.className = 'stream-tile';
@@ -95,10 +99,17 @@ function renderStreams() {
     `;
     tile.addEventListener('click', () => openBigStream(stream));
     streamsGrid.appendChild(tile);
+    // Сохраняем iframe для управления src
+    const iframe = tile.querySelector('iframe');
+    miniIframes.push(iframe);
+    miniSrcs.push(iframe.src);
   });
 }
 
 function openBigStream(stream) {
+  // Ставим на паузу все мини-стримы (убираем src)
+  miniIframes.forEach(iframe => { iframe.src = 'about:blank'; });
+
   let modal = document.getElementById('big-stream-modal');
   if (!modal) {
     modal = document.createElement('div');
@@ -137,6 +148,8 @@ function closeBigStream() {
     modal.classList.remove('show');
     setTimeout(() => { modal.style.display = 'none'; }, 200);
   }
+  // Возвращаем src мини-стримам
+  miniIframes.forEach((iframe, i) => { iframe.src = miniSrcs[i]; });
 }
 
 renderStreams();
