@@ -84,11 +84,21 @@ function openBigStream(stream, avatarHTML) {
     document.body.appendChild(modal);
     modal.querySelector('.big-stream-close').onclick = closeBigStream;
     modal.querySelector('.big-stream-backdrop').onclick = closeBigStream;
+    // Закрытие по Esc
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeBigStream();
+    });
   }
   modal.querySelector('.big-stream-iframe-wrap').innerHTML =
     `<iframe src="https://player.twitch.tv/?channel=${stream.channel}&parent=${location.hostname}&autoplay=true&time=0s" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>`;
-  // Аватар или иконка
-  modal.querySelector('.big-stream-meta .stream-avatar').outerHTML = avatarHTML;
+  // Вставляем аватар/SVG корректно
+  const avatarContainer = modal.querySelector('.big-stream-meta .stream-avatar');
+  avatarContainer.innerHTML = '';
+  if (stream.avatar) {
+    avatarContainer.outerHTML = `<img class="stream-avatar" src="${stream.avatar}" alt="${stream.channel}">`;
+  } else {
+    avatarContainer.innerHTML = getRandomIcon();
+  }
   modal.querySelector('.big-stream-meta .stream-title').textContent = stream.title;
   modal.querySelector('.big-stream-meta .stream-channel').href = `https://www.twitch.tv/${stream.channel}`;
   modal.querySelector('.big-stream-meta .stream-channel').textContent = stream.channel;
