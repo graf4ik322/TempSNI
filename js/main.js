@@ -1,3 +1,4 @@
+const TWITCH_PARENT = 'gate.edencore.cc';
 const universalAvatarSVG = `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="rgba(212,175,55,0.13)"/><ellipse cx="24" cy="20" rx="8" ry="8" fill="#FFD700"/><ellipse cx="24" cy="36" rx="13" ry="7" fill="#FFD700"/></svg>`;
 
 const streams = [
@@ -16,8 +17,13 @@ const streams = [
 ];
 
 const streamsGrid = document.getElementById('streams-grid');
-let miniIframes = [];
-let miniSrcs = [];
+const statViewers = document.getElementById('stat-viewers');
+const statStreams = document.getElementById('stat-streams');
+const statUpdated = document.getElementById('stat-updated');
+const randomBtn = document.getElementById('random-btn');
+const themeToggle = document.getElementById('theme-toggle');
+const fakeChat = document.getElementById('fake-chat');
+const fakeChatMessages = document.getElementById('fake-chat-messages');
 
 function getRandomViewers() {
   return Math.floor(Math.random() * (8000 - 300 + 1)) + 300;
@@ -25,16 +31,19 @@ function getRandomViewers() {
 
 function renderStreams() {
   streamsGrid.innerHTML = '';
-  miniIframes = [];
-  miniSrcs = [];
-  streams.forEach((stream) => {
+  let totalViewers = 0;
+  streams.forEach((stream, idx) => {
     const viewers = getRandomViewers();
+    totalViewers += viewers;
     const tile = document.createElement('div');
     tile.className = 'stream-tile';
+    // LIVE индикатор
+    const liveHTML = `<span class="live-indicator"><span class="live-dot"></span>LIVE</span>`;
     const avatarHTML = `<span class="stream-avatar stream-avatar-svg">${universalAvatarSVG}</span>`;
     tile.innerHTML = `
+      ${liveHTML}
       <div class="twitch-embed-container">
-        <iframe src="https://player.twitch.tv/?channel=${stream.channel}&parent=graf4ik322.github.io" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+        <iframe src="https://player.twitch.tv/?channel=${stream.channel}&parent=${TWITCH_PARENT}&autoplay=true&muted=true" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
       </div>
       <div class="stream-info">
         ${avatarHTML}
@@ -45,69 +54,79 @@ function renderStreams() {
         </div>
       </div>
     `;
-    tile.addEventListener('click', () => openBigStream(stream, viewers));
+    // Анимация появления
+    setTimeout(() => tile.classList.add('animated'), 80 * idx);
     streamsGrid.appendChild(tile);
-    const iframe = tile.querySelector('iframe');
-    miniIframes.push(iframe);
-    miniSrcs.push(iframe.src);
   });
+  // Статистика
+  statViewers.textContent = totalViewers;
+  statStreams.textContent = streams.length;
 }
 
-function openBigStream(stream, viewers) {
-  miniIframes.forEach(iframe => { iframe.src = 'about:blank'; });
-  let modal = document.getElementById('big-stream-modal');
-  if (!modal) {
-    modal = document.createElement('div');
-    modal.id = 'big-stream-modal';
-    modal.innerHTML = `
-      <div class="big-stream-backdrop"></div>
-      <div class="big-stream-content">
-        <button class="big-stream-close" title="Закрыть">×</button>
-        <div class="big-stream-iframe-wrap"></div>
-        <div class="big-stream-meta">
-          <span class="stream-avatar stream-avatar-svg">${universalAvatarSVG}</span>
-          <div class="stream-title"></div>
-          <a class="stream-channel" href="#" target="_blank"></a>
-          <div class="stream-viewers"></div>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(modal);
-    modal.querySelector('.big-stream-close').onclick = closeBigStream;
-    modal.querySelector('.big-stream-backdrop').onclick = closeBigStream;
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeBigStream();
-    });
-  }
-  // Очищаем и вставляем iframe заново
-  const iframeWrap = modal.querySelector('.big-stream-iframe-wrap');
-  iframeWrap.innerHTML = '';
-  const bigIframe = document.createElement('iframe');
-  bigIframe.src = `https://player.twitch.tv/?channel=${stream.channel}&parent=graf4ik322.github.io&autoplay=true`;
-  bigIframe.width = '800';
-  bigIframe.height = '450';
-  bigIframe.style.maxWidth = '90vw';
-  bigIframe.style.maxHeight = '60vh';
-  bigIframe.style.aspectRatio = '16/9';
-  bigIframe.frameBorder = '0';
-  bigIframe.allowFullscreen = true;
-  iframeWrap.appendChild(bigIframe);
-  // Заполняем мета
-  modal.querySelector('.big-stream-meta .stream-title').textContent = stream.title;
-  modal.querySelector('.big-stream-meta .stream-channel').href = `https://www.twitch.tv/${stream.channel}`;
-  modal.querySelector('.big-stream-meta .stream-channel').textContent = stream.channel;
-  modal.querySelector('.big-stream-meta .stream-viewers').textContent = viewers + ' зрителей';
-  modal.style.display = 'flex';
-  setTimeout(() => { modal.classList.add('show'); }, 10);
+// Статистика: обновлено X секунд назад
+let lastUpdate = Date.now();
+function updateStatTime() {
+  const sec = Math.floor((Date.now() - lastUpdate) / 1000);
+  statUpdated.textContent = sec;
 }
+setInterval(updateStatTime, 1000);
 
-function closeBigStream() {
-  const modal = document.getElementById('big-stream-modal');
-  if (modal) {
-    modal.classList.remove('show');
-    setTimeout(() => { modal.style.display = 'none'; }, 200);
-  }
-  miniIframes.forEach((iframe, i) => { iframe.src = miniSrcs[i]; });
+// Кнопка случайного стрима
+randomBtn.onclick = () => {
+  const tiles = Array.from(document.querySelectorAll('.stream-tile'));
+  if (!tiles.length) return;
+  const idx = Math.floor(Math.random() * tiles.length);
+  tiles[idx].scrollIntoView({ behavior: 'smooth', block: 'center' });
+  tiles[idx].classList.add('animated');
+  tiles[idx].style.boxShadow = '0 0 0 4px #FFD700, 0 10px 30px var(--glow)';
+  setTimeout(() => { tiles[idx].style.boxShadow = ''; }, 1200);
+};
+
+// Переключатель темы
+function setTheme(light) {
+  document.body.classList.toggle('theme-light', light);
+  themeToggle.textContent = light ? '🌞' : '🌙';
 }
+themeToggle.onclick = () => {
+  setTheme(!document.body.classList.contains('theme-light'));
+};
+// По умолчанию — тёмная
+setTheme(false);
 
+// Фейковый чат
+const fakeNicks = ['xXx_K1ng', 'edenCore', 'StreamerFan', 'goldenboy', 'NightBot', 'Twitchy', 'coregirl', 'proViewer', 'VIPuser', 'justChill'];
+const fakeMsgs = [
+  'Вау, какой топовый стрим!',
+  'Кто тут из СНГ?',
+  'Лайк за оформление!',
+  '24/7 — это круто!',
+  'Где чатик активнее?',
+  'Погнали в дискорд!',
+  'Кто за кого болеет?',
+  'А есть тут PUBG?',
+  'CS2 forever!',
+  'Rust топ!',
+  'Всем привет!',
+  'Сколько тут зрителей?',
+  'Кто с мобилы?',
+  'Где донаты? 😅',
+  'Поставьте лайк!'
+];
+function addFakeChatMsg() {
+  const nick = fakeNicks[Math.floor(Math.random() * fakeNicks.length)];
+  const msg = fakeMsgs[Math.floor(Math.random() * fakeMsgs.length)];
+  const el = document.createElement('div');
+  el.className = 'fake-chat-message';
+  el.innerHTML = `<span class="fake-chat-nick">${nick}:</span> <span class="fake-chat-text">${msg}</span>`;
+  fakeChatMessages.appendChild(el);
+  fakeChatMessages.scrollTop = fakeChatMessages.scrollHeight;
+  // Ограничение на 40 сообщений
+  if (fakeChatMessages.children.length > 40) fakeChatMessages.removeChild(fakeChatMessages.firstChild);
+}
+setInterval(addFakeChatMsg, 1800);
+for (let i = 0; i < 10; ++i) addFakeChatMsg();
+
+// Первичный рендер
 renderStreams();
+lastUpdate = Date.now();
+updateStatTime();
