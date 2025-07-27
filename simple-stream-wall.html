@@ -36,6 +36,7 @@
       justify-content: stretch;
       border: 1.5px solid #333;
       transition: box-shadow 0.2s, border-color 0.2s;
+      position: relative;
     }
     .stream-tile:hover {
       box-shadow: 0 4px 24px #000a;
@@ -65,6 +66,12 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+    #error {
+      text-align: center;
+      color: #ff6b6b;
+      margin-top: 2rem;
+      font-size: 1.2rem;
+    }
     @media (max-width: 600px) {
       #wall {
         grid-template-columns: 1fr;
@@ -74,59 +81,46 @@
   </style>
 </head>
 <body>
-  <h1>Стрим-стена</h1>
+  <h1>Популярные стримы Twitch</h1>
   <div id="wall"></div>
+  <div id="error"></div>
   <script>
-    // Задайте здесь список ссылок на стримы:
-    const STREAM_URLS = [
-      // Примеры:
-      'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-      'https://www.twitch.tv/esl_csgo',
-      'https://kick.com/trainwreckstv',
-      'https://trovo.live/NoCopyrightSounds',
-      // Добавьте свои ссылки ниже:
-    ];
+    // Получить топ-стримы Twitch через публичное API (Helix)
+    // Для публичного доступа нужен client-id, используем демо-ключ Twitch (ограничения по rate-limit)
+    const TWITCH_CLIENT_ID = 'kimne78kx3ncx6brgo4mv6wki5h1ko'; // публичный client-id, используется Twitch web
+    const TWITCH_API_URL = 'https://api.twitch.tv/helix/streams?first=12&language=ru';
+
+    async function fetchTwitchStreams() {
+      try {
+        const resp = await fetch(TWITCH_API_URL, {
+          headers: {
+            'Client-ID': TWITCH_CLIENT_ID,
+            'Accept': 'application/vnd.twitchtv.v5+json',
+          },
+        });
+        if (!resp.ok) throw new Error('Ошибка Twitch API: ' + resp.status);
+        const data = await resp.json();
+        if (!data.data || !Array.isArray(data.data)) throw new Error('Нет данных о стримах');
+        return data.data.map(stream => `https://www.twitch.tv/${stream.user_login}`);
+      } catch (e) {
+        document.getElementById('error').textContent = 'Не удалось получить список стримов с Twitch: ' + e.message;
+        return [];
+      }
+    }
 
     function getIframeHTML(url) {
       url = url.trim();
       if (!url) return '';
-      // YouTube
-      let yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/);
-      if (yt) {
-        return `<iframe src='https://www.youtube.com/embed/${yt[1]}' allowfullscreen title='YouTube'></iframe>`;
-      }
-      // Twitch
       let tw = url.match(/twitch\.tv\/([\w-]+)/);
       if (tw) {
         return `<iframe src='https://player.twitch.tv/?channel=${tw[1]}&parent='+location.hostname+'' allowfullscreen title='Twitch'></iframe>`;
-      }
-      // Kick
-      let kick = url.match(/kick\.com\/([\w-]+)/);
-      if (kick) {
-        return `<iframe src='https://player.kick.com/${kick[1]}' allowfullscreen title='Kick'></iframe>`;
-      }
-      // Trovo
-      let trovo = url.match(/trovo\.live\/([\w-]+)/);
-      if (trovo) {
-        return `<iframe src='https://trovo.live/embed/player?streamer=${trovo[1]}' allowfullscreen title='Trovo'></iframe>`;
-      }
-      // Прямой iframe
-      if (url.startsWith('http')) {
-        return `<iframe src='${url}' allowfullscreen title='Stream'></iframe>`;
       }
       return '';
     }
 
     function getLabel(url) {
-      // Короткая подпись для плитки
-      let yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/);
-      if (yt) return 'YouTube: ' + yt[1];
       let tw = url.match(/twitch\.tv\/([\w-]+)/);
       if (tw) return 'Twitch: ' + tw[1];
-      let kick = url.match(/kick\.com\/([\w-]+)/);
-      if (kick) return 'Kick: ' + kick[1];
-      let trovo = url.match(/trovo\.live\/([\w-]+)/);
-      if (trovo) return 'Trovo: ' + trovo[1];
       return url;
     }
 
@@ -136,13 +130,15 @@
       urls.forEach((url) => {
         const tile = document.createElement('div');
         tile.className = 'stream-tile';
-        tile.style.position = 'relative';
         tile.innerHTML = getIframeHTML(url) + `<div class='stream-label'>${getLabel(url)}</div>`;
         wall.appendChild(tile);
       });
     }
 
-    renderWall(STREAM_URLS);
+    (async function() {
+      const urls = await fetchTwitchStreams();
+      if (urls.length > 0) renderWall(urls);
+    })();
   </script>
 </body>
 </html>
