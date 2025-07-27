@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- SEO Meta Tags -->
+    <title>TwchPlaceholder - Frontend-only решение для создания placeholder</title>
+    <meta name="description" content="Создавайте настраиваемые placeholder без бекенда. Поддержка текста, изображений, видео и интеграции с внешними API." />
+    <meta name="keywords" content="placeholder, frontend, React, TypeScript, веб-приложение" />
+    <meta name="author" content="TwchPlaceholder Team" />
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="TwchPlaceholder" />
+    <meta property="og:description" content="Frontend-only решение для создания настраиваемых placeholder" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://twch-placeholder.vercel.app" />
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="TwchPlaceholder" />
+    <meta name="twitter:description" content="Frontend-only решение для создания настраиваемых placeholder" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#007AFF" />
+    
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="/vite.svg" />
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Preconnect to external domains for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:;" />
+  </head>
+  <body>
+    <noscript>
+      <div style="text-align: center; padding: 2rem; font-family: Arial, sans-serif;">
+        <h1>JavaScript Required</h1>
+        <p>Для работы TwchPlaceholder необходимо включить JavaScript в вашем браузере.</p>
+        <p>Please enable JavaScript in your browser to use TwchPlaceholder.</p>
+      </div>
+    </noscript>
+    
+    <div id="root" role="main"></div>
+    
+    <!-- Loading indicator for better UX -->
+    <style>
+      #loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+      }
+      
+      .loading-spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #007AFF;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      @media (prefers-color-scheme: dark) {
+        #loading {
+          background: #1a1a1a;
+        }
+      }
+    </style>
+    
+    <div id="loading">
+      <div class="loading-spinner"></div>
+    </div>
+    
+    <script>
+      // Hide loading indicator when React app loads
+      window.addEventListener('load', function() {
+        const loading = document.getElementById('loading');
+        if (loading) {
+          loading.style.display = 'none';
+        }
+      });
+      
+      // Service Worker registration for PWA capabilities
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/sw.js')
+            .then(function(registration) {
+              console.log('SW registered: ', registration);
+            })
+            .catch(function(registrationError) {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+    </script>
+    
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
