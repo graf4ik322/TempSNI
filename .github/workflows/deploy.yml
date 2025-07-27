@@ -93,3 +93,31 @@ jobs:
         budgetPath: ./lighthouse-budget.json
         uploadArtifacts: true
         temporaryPublicStorage: true
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Установка Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Установка зависимостей (если есть)
+        run: |
+          if [ -f package.json ]; then npm install; fi
+      - name: Копирование файлов в dist
+        run: |
+          mkdir -p dist
+          cp -r index.html css js dist/
+      - name: Деплой на GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
