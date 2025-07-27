@@ -77,7 +77,7 @@ const streamsGrid = document.getElementById('streams-grid');
 
 function renderStreams() {
   streamsGrid.innerHTML = '';
-  streams.forEach(stream => {
+  streams.forEach((stream, idx) => {
     const tile = document.createElement('div');
     tile.className = 'stream-tile';
     tile.innerHTML = `
@@ -93,8 +93,50 @@ function renderStreams() {
         </div>
       </div>
     `;
+    tile.addEventListener('click', () => openBigStream(stream));
     streamsGrid.appendChild(tile);
   });
+}
+
+function openBigStream(stream) {
+  let modal = document.getElementById('big-stream-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'big-stream-modal';
+    modal.innerHTML = `
+      <div class="big-stream-backdrop"></div>
+      <div class="big-stream-content">
+        <button class="big-stream-close" title="Закрыть">×</button>
+        <div class="big-stream-iframe-wrap"></div>
+        <div class="big-stream-meta">
+          <img class="stream-avatar" src="" alt="">
+          <div class="stream-title"></div>
+          <a class="stream-channel" href="#" target="_blank"></a>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    modal.querySelector('.big-stream-close').onclick = closeBigStream;
+    modal.querySelector('.big-stream-backdrop').onclick = closeBigStream;
+  }
+  // Заполняем данные
+  modal.querySelector('.big-stream-iframe-wrap').innerHTML =
+    `<iframe src="https://player.twitch.tv/?channel=${stream.channel}&parent=${location.hostname}&autoplay=true&time=0s" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>`;
+  modal.querySelector('.stream-avatar').src = stream.avatar;
+  modal.querySelector('.stream-avatar').alt = stream.channel;
+  modal.querySelector('.stream-title').textContent = stream.title;
+  modal.querySelector('.stream-channel').href = `https://www.twitch.tv/${stream.channel}`;
+  modal.querySelector('.stream-channel').textContent = stream.channel;
+  modal.style.display = 'flex';
+  setTimeout(() => { modal.classList.add('show'); }, 10);
+}
+
+function closeBigStream() {
+  const modal = document.getElementById('big-stream-modal');
+  if (modal) {
+    modal.classList.remove('show');
+    setTimeout(() => { modal.style.display = 'none'; }, 200);
+  }
 }
 
 renderStreams();
