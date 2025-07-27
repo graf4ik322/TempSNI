@@ -1,46 +1,32 @@
-const svgIcons = [
-  `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="rgba(212,175,55,0.13)"/><path d="M24 10l3.09 6.26L34 17.27l-5 4.87L30.18 29 24 25.27 17.82 29 19 22.14l-5-4.87 6.91-1.01L24 10z" fill="#FFD700"/></svg>`,
-  `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="rgba(212,175,55,0.13)"/><path d="M24 12a12 12 0 100 24 12 12 0 000-24zm0 2a10 10 0 110 20 10 10 0 010-20zm-2 5v6h6v2h-8v-8h2z" fill="#FFD700"/></svg>`,
-  `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="rgba(212,175,55,0.13)"/><path d="M24 10l8 14h-6l2 10-8-14h6l-2-10z" fill="#FFD700"/></svg>`,
-  `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="rgba(212,175,55,0.13)"/><rect x="14" y="20" width="20" height="8" rx="4" fill="#FFD700"/><rect x="18" y="16" width="12" height="4" rx="2" fill="#FFD700"/></svg>`,
-  `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="rgba(212,175,55,0.13)"/><path d="M24 12l4 8h8l-6 6 2 8-8-4-8 4 2-8-6-6h8l4-8z" fill="#FFD700"/></svg>`,
-  `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="rgba(212,175,55,0.13)"/><rect x="18" y="18" width="12" height="12" rx="6" fill="#FFD700"/><rect x="22" y="14" width="4" height="4" rx="2" fill="#FFD700"/></svg>`,
-  `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="rgba(212,175,55,0.13)"/><path d="M24 10l6 12h-4l2 8-6-12h4l-2-8z" fill="#FFD700"/></svg>`
-];
+const universalAvatarSVG = `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="rgba(212,175,55,0.13)"/><ellipse cx="24" cy="20" rx="8" ry="8" fill="#FFD700"/><ellipse cx="24" cy="36" rx="13" ry="7" fill="#FFD700"/></svg>`;
 
 const streams = [
-  { channel: 'dis_1', avatar: '', title: 'DIS_1 24/7', viewers: 1200 },
-  { channel: 'big_cuzo', avatar: '', title: 'Big Cuzo', viewers: 980 },
-  { channel: 'widdz', avatar: '', title: 'Widdz', viewers: 2100 },
-  { channel: 'theburntpeanut_247', avatar: '', title: 'TheBurntPeanut 24/7', viewers: 1500 },
-  { channel: 'shrood', avatar: '', title: 'Shrood', viewers: 1700 },
-  { channel: 'blurbstv', avatar: '', title: 'BlurbsTV', viewers: 800 },
-  { channel: 'snacksypoo247', avatar: '', title: 'Snacksypoo 24/7', viewers: 600 },
-  { channel: 'toriasmr', avatar: '', title: 'ToriASMR', viewers: 1100 },
-  { channel: 'yugioh_official', avatar: '', title: 'Yu-Gi-Oh! Official', viewers: 900 },
-  { channel: 'retrocrush_tv', avatar: '', title: 'RetroCrush TV', viewers: 700 },
-  { channel: 'alf', avatar: '', title: 'ALF', viewers: 500 },
-  { channel: 'lirik_247', avatar: '', title: 'Lirik 24/7', viewers: 1300 }
+  { channel: 'dis_1', title: 'DIS_1 24/7', viewers: 1200 },
+  { channel: 'big_cuzo', title: 'Big Cuzo', viewers: 980 },
+  { channel: 'widdz', title: 'Widdz', viewers: 2100 },
+  { channel: 'theburntpeanut_247', title: 'TheBurntPeanut 24/7', viewers: 1500 },
+  { channel: 'shrood', title: 'Shrood', viewers: 1700 },
+  { channel: 'blurbstv', title: 'BlurbsTV', viewers: 800 },
+  { channel: 'snacksypoo247', title: 'Snacksypoo 24/7', viewers: 600 },
+  { channel: 'toriasmr', title: 'ToriASMR', viewers: 1100 },
+  { channel: 'yugioh_official', title: 'Yu-Gi-Oh! Official', viewers: 900 },
+  { channel: 'retrocrush_tv', title: 'RetroCrush TV', viewers: 700 },
+  { channel: 'alf', title: 'ALF', viewers: 500 },
+  { channel: 'lirik_247', title: 'Lirik 24/7', viewers: 1300 }
 ];
 
 const streamsGrid = document.getElementById('streams-grid');
 let miniIframes = [];
 let miniSrcs = [];
 
-function getRandomIcon() {
-  return svgIcons[Math.floor(Math.random() * svgIcons.length)];
-}
-
 function renderStreams() {
   streamsGrid.innerHTML = '';
   miniIframes = [];
   miniSrcs = [];
-  streams.forEach((stream, idx) => {
+  streams.forEach((stream) => {
     const tile = document.createElement('div');
     tile.className = 'stream-tile';
-    const avatarHTML = stream.avatar
-      ? `<img class="stream-avatar" src="${stream.avatar}" alt="${stream.channel}">`
-      : `<span class="stream-avatar stream-avatar-svg">${getRandomIcon()}</span>`;
+    const avatarHTML = `<span class="stream-avatar stream-avatar-svg">${universalAvatarSVG}</span>`;
     tile.innerHTML = `
       <div class="twitch-embed-container">
         <iframe src="https://player.twitch.tv/?channel=${stream.channel}&parent=${location.hostname}&autoplay=true&muted=true&time=0s" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
@@ -56,7 +42,6 @@ function renderStreams() {
     `;
     tile.addEventListener('click', () => openBigStream(stream, avatarHTML));
     streamsGrid.appendChild(tile);
-    // Сохраняем iframe для управления src
     const iframe = tile.querySelector('iframe');
     miniIframes.push(iframe);
     miniSrcs.push(iframe.src);
@@ -84,21 +69,15 @@ function openBigStream(stream, avatarHTML) {
     document.body.appendChild(modal);
     modal.querySelector('.big-stream-close').onclick = closeBigStream;
     modal.querySelector('.big-stream-backdrop').onclick = closeBigStream;
-    // Закрытие по Esc
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeBigStream();
     });
   }
   modal.querySelector('.big-stream-iframe-wrap').innerHTML =
     `<iframe src="https://player.twitch.tv/?channel=${stream.channel}&parent=${location.hostname}&autoplay=true&time=0s" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>`;
-  // Вставляем аватар/SVG корректно
+  // Вставляем универсальный SVG
   const avatarContainer = modal.querySelector('.big-stream-meta .stream-avatar');
-  avatarContainer.innerHTML = '';
-  if (stream.avatar) {
-    avatarContainer.outerHTML = `<img class="stream-avatar" src="${stream.avatar}" alt="${stream.channel}">`;
-  } else {
-    avatarContainer.innerHTML = getRandomIcon();
-  }
+  avatarContainer.innerHTML = universalAvatarSVG;
   modal.querySelector('.big-stream-meta .stream-title').textContent = stream.title;
   modal.querySelector('.big-stream-meta .stream-channel').href = `https://www.twitch.tv/${stream.channel}`;
   modal.querySelector('.big-stream-meta .stream-channel').textContent = stream.channel;
