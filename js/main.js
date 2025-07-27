@@ -1,42 +1,50 @@
-const categories = ['cs2', 'rust', 'pubg'];
 const streamsGrid = document.getElementById('streams-grid');
 const categoryBtns = document.querySelectorAll('.category-btn');
 
-const demoStreams = {
+// Популярные Twitch-каналы по категориям (можно обновить по желанию)
+const twitchStreams = {
   cs2: [
-    { title: 'CS2 Stream #1', channel: 'player1', viewers: 12000 },
-    { title: 'CS2 Stream #2', channel: 'player2', viewers: 9500 },
-    { title: 'CS2 Stream #3', channel: 'player3', viewers: 8000 },
-    { title: 'CS2 Stream #4', channel: 'player4', viewers: 7000 },
-    { title: 'CS2 Stream #5', channel: 'player5', viewers: 6000 },
+    { title: 's1mple', channel: 's1mple', viewers: null },
+    { title: 'Gaules', channel: 'gaules', viewers: null },
+    { title: 'ESL_CSGO', channel: 'esl_csgo', viewers: null },
+    { title: 'fl0m', channel: 'fl0m', viewers: null },
+    { title: 'Pimp', channel: 'pimp', viewers: null },
   ],
   rust: [
-    { title: 'Rust Stream #1', channel: 'rustacean1', viewers: 9000 },
-    { title: 'Rust Stream #2', channel: 'rustacean2', viewers: 8500 },
-    { title: 'Rust Stream #3', channel: 'rustacean3', viewers: 7000 },
-    { title: 'Rust Stream #4', channel: 'rustacean4', viewers: 6500 },
-    { title: 'Rust Stream #5', channel: 'rustacean5', viewers: 6000 },
+    { title: 'hJune', channel: 'hjune', viewers: null },
+    { title: 'Blooprint', channel: 'blooprint', viewers: null },
+    { title: 'Frost', channel: 'frost', viewers: null },
+    { title: 'Welyn', channel: 'welyn', viewers: null },
+    { title: 'Stevie', channel: 'stevie', viewers: null },
   ],
   pubg: [
-    { title: 'PUBG Stream #1', channel: 'pubger1', viewers: 8000 },
-    { title: 'PUBG Stream #2', channel: 'pubger2', viewers: 7500 },
-    { title: 'PUBG Stream #3', channel: 'pubger3', viewers: 7000 },
-    { title: 'PUBG Stream #4', channel: 'pubger4', viewers: 6500 },
-    { title: 'PUBG Stream #5', channel: 'pubger5', viewers: 6000 },
+    { title: 'chocoTaco', channel: 'chocotaco', viewers: null },
+    { title: 'halifax', channel: 'halifax', viewers: null },
+    { title: 'TGLTN', channel: 'tgltn', viewers: null },
+    { title: 'Ibiza', channel: 'ibiza', viewers: null },
+    { title: 'TheRealKraftyy', channel: 'therealkraftyy', viewers: null },
   ],
 };
 
 function renderStreams(category) {
   streamsGrid.innerHTML = '';
-  demoStreams[category].forEach(stream => {
+  twitchStreams[category].forEach(stream => {
     const tile = document.createElement('div');
     tile.className = 'stream-tile';
     tile.innerHTML = `
-      <div style="position:relative;width:100%;height:180px;background:#111;display:flex;align-items:center;justify-content:center;">
-        <span style="color:#FFD700;font-size:2.5rem;">▶</span>
+      <div style="position:relative;width:100%;height:180px;background:#111;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <iframe
+          src="https://player.twitch.tv/?channel=${stream.channel}&parent=${location.hostname}"
+          frameborder="0"
+          allowfullscreen="true"
+          scrolling="no"
+          height="180"
+          width="100%"
+          style="border:none;display:block;background:#111;"
+        ></iframe>
       </div>
       <div class="stream-title">${stream.title}</div>
-      <div class="stream-meta">Канал: <b>${stream.channel}</b><br>Зрителей: <b>${stream.viewers}</b></div>
+      <div class="stream-meta">Канал: <b>${stream.channel}</b></div>
     `;
     streamsGrid.appendChild(tile);
   });
